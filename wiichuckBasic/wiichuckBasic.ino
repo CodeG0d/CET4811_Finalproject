@@ -18,6 +18,8 @@ int jYmin = 128;
 int jYmax = 128;
 int jThresh = 33;
 int jPos = 5;
+int pjPos = 5;
+
 
 byte data[] = {0,0,0,0,0,0,0x00,0x0A};
 
@@ -42,7 +44,10 @@ void loop() {
 
   calibrateDeadzone();
   calcJ();
-  Serial.println(jPos);
+  if(jPos != pjPos){
+    Serial.println(jPos);
+  }
+  pjPos = jPos;
   
 //  //Write accelerometer data to Serial port
 //  data[0] = (byte)(aX>>8 & 0x00FF);
