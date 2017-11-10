@@ -15,10 +15,12 @@ void setup() {
 
   initSD();
 
+  //Count up until new file
   while(SD.exists(String(logCount) + ".log")){
     logCount++;
   }
 
+  //Create, and write to file
   theFile = SD.open(String(logCount) + ".log", FILE_WRITE);
   if (theFile) {
     Serial.print("Creating Log" + logCount);
@@ -26,8 +28,7 @@ void setup() {
     theFile.close();
     Serial.println("Done!");
   } else {
-    // if the file didn't open, print an error:
-    Serial.println("error opening test.txt");
+    Serial.println("Log#" + String(logCount));
   }  
   
 }
