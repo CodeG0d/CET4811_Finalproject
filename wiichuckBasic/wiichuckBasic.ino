@@ -20,6 +20,7 @@ int jThresh = 33;
 int jPos = 5;
 int pjPos = 5;
 
+int dat[] = {5, 5, 5};
 
 byte data[] = {0,0,0,0,0,0,0x00,0x0A};
 
@@ -46,6 +47,12 @@ void loop() {
   calcJ();
   if(jPos != pjPos){
     Serial.println(jPos);
+    dat[0] = dat[1];
+    dat[1] = dat[2];
+    dat[2] = jPos;
+    if(dat[0] == 2 && dat[1] == 3 && dat[2] == 6){
+      Serial.println("HADOKEN!");
+    }
   }
   pjPos = jPos;
   
