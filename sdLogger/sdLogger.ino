@@ -7,6 +7,11 @@ File theFile;
 
 int logCount = 0;
 
+float bikeSpeed;
+float wheelRaidus = 10;
+float TAU = 6.283185307;
+
+
 int PIN = A0;
 boolean curState;
 boolean preState;
@@ -70,14 +75,19 @@ void logRotation(){
   }
   preReading = millis();
   
-  //Assume switcing in 100ms to be contact bounce
-  //(For 20 in wheel, 100ms = 35.7mph)
+  //Assume switcing in 50ms to be contact bounce
+  //(For 20 in wheel, 50ms = 35.7mph)
   if(stateTime > 100){
     stateTime = 0;
     preState = curState;
     //Record time on falling edge
     if(!curState){
-      Serial.println(millis() - preTrig);
+      //Print speed
+      unsigned long int t = millis() - preTrig;
+      bikeSpeed = TAU*wheelRaidus/t*3600000.0/63360.0;
+      Serial.print(bikeSpeed);
+      Serial.print("\t");
+      Serial.println(t);
       theFile = SD.open(String(logCount) + fileExt, FILE_WRITE);
       if (theFile) {
         theFile.println(millis());
