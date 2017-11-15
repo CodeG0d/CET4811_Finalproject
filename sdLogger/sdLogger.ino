@@ -10,7 +10,10 @@ SdFile root;
 int logCount = 0;
 
 int PIN = A0;
-boolean pinState;
+boolean curState;
+boolean preState;
+int stateCount = 0;
+unsigned long int pTrig = 0;
 
 void setup() {
   pinMode(PIN, INPUT_PULLUP);
@@ -23,7 +26,7 @@ void setup() {
   while (SD.exists(String(logCount) + ".log")) {
     logCount++;
   }
-
+  
   //Create and write to file
   theFile = SD.open(String(logCount) + ".log", FILE_WRITE);
   if (theFile) {
@@ -34,21 +37,12 @@ void setup() {
   } else {
     Serial.println("Log#" + String(logCount));
   }
-
 }
 
 void loop() {
   //Log time of each falling edge
-  if (pinState && !digitalRead(PIN)) {
-    Serial.println("Pressed!");
-    theFile = SD.open(String(logCount) + ".log", FILE_WRITE);
-    if (theFile) {
-      theFile.println(millis());
-      theFile.close();
-    }
-  }
-  pinState = digitalRead(PIN);
-  delay(50);
+  logRotation();
+  delay(20);
 }
 
 void initSD() {
@@ -59,5 +53,34 @@ void initSD() {
     return;
   }
   Serial.println("initialization done.");
+}
+
+void logRotation(){
+  //Record time of each rotation
+  
+  //Software debounce
+  curState = digitalRead(PIN);
+  if(curState != preState){
+    stateCount++;
+  }
+  else if(stateCount > 0){
+    stateCount--;
+  }
+
+  if(stateCount > 5){
+    stateCount = 0;
+    preState = curState;
+    //Record time on falling edge
+    if(!curState){
+      Serial.println(millis() - pTrig);
+      theFile = SD.open(String(logCount) + ".log", FILE_WRITE);
+      if (theFile) {
+        theFile.println(millis());
+        theFile.close();
+      }
+    }
+    pTrig = millis();
+  }
+
 }
 
