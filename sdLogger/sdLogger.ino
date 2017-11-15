@@ -12,8 +12,9 @@ int logCount = 0;
 int PIN = A0;
 boolean curState;
 boolean preState;
-int stateCount = 0;
-unsigned long int pTrig = 0;
+unsigned int stateCount = 0;
+unsigned long int preReading = 0;
+unsigned long int preTrig = 0;
 
 void setup() {
   pinMode(PIN, INPUT_PULLUP);
@@ -42,7 +43,6 @@ void setup() {
 void loop() {
   //Log time of each falling edge
   logRotation();
-  delay(20);
 }
 
 void initSD() {
@@ -60,27 +60,30 @@ void logRotation(){
   
   //Software debounce
   curState = digitalRead(PIN);
-  if(curState != preState){
-    stateCount++;
+  if(millis() > preReading){
+    if(curState != preState){
+      stateCount += (millis()-preReading);
+    }
+    else if(stateCount > 0){
+      stateCount -= (millis()-preReading);
+    }
   }
-  else if(stateCount > 0){
-    stateCount--;
-  }
-
-  if(stateCount > 5){
+  preReading = millis();
+  //Assume switcing in 100ms to be contact bounce
+  //(For 20 in wheel, 100ms = 35.7mph)
+  if(stateCount > 100){
     stateCount = 0;
     preState = curState;
     //Record time on falling edge
     if(!curState){
-      Serial.println(millis() - pTrig);
+      Serial.println(millis() - preTrig);
       theFile = SD.open(String(logCount) + ".log", FILE_WRITE);
       if (theFile) {
         theFile.println(millis());
         theFile.close();
       }
+      preTrig = millis();
     }
-    pTrig = millis();
   }
-
 }
 
