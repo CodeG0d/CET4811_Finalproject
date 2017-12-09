@@ -34,7 +34,6 @@ void init_menus() { //Create all the menus
   //inital state
   curmenu = menu_logging;
   selection = 0;
-  printMenu();
 }
 
 Menu create_menu(Menu &theMenu, char theName[], Menu &theParent, int theSize, Menu theChildren[]) {

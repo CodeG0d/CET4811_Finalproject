@@ -22,6 +22,7 @@ void setup() {
   init_menus();
   nunchuck.begin();
   Serial.begin(115200);
+  printMenu();
 }
 
 void loop() {
