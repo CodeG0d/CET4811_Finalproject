@@ -52,9 +52,9 @@ void init_menus(){//Create all the menus
   menu_config_items[1] = create_menu(menu_tachometer, "Setup Tachometer", menu_config, 0, NULL);
   menu_config_items[2] = create_menu(menu_friction, "Setup Friction", menu_config, 0, NULL);
   //Create logging menu
-  menu_logging_items[0] = create_menu(menu_startlogging, "Start Logging", menu_main, 0, NULL);
-  menu_logging_items[1] = create_menu(menu_reviewlogs, "Review Logs", menu_main, 0, NULL);
-  menu_logging_items[2] = create_menu(menu_clearlogs, "Clear Logs", menu_main, 0, NULL);
+  menu_logging_items[0] = create_menu(menu_startlogging, "Start Logging", menu_logging, 0, NULL);
+  menu_logging_items[1] = create_menu(menu_reviewlogs, "Review Logs", menu_logging, 0, NULL);
+  menu_logging_items[2] = create_menu(menu_clearlogs, "Clear Logs", menu_logging, 0, NULL);
   //Create main menu
   menu_main_items[0] = create_menu(menu_logging, "Logging", menu_main, 3, menu_logging_items);
   menu_main_items[1] = create_menu(menu_config, "Configuration", menu_main, 3, menu_config_items);

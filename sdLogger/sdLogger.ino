@@ -75,16 +75,17 @@ void logRotation(){
   }
   preReading = millis();
   
-  //Assume switcing in 50ms to be contact bounce
-  //(For 20 in wheel, 50ms = 35.7mph)
-  if(stateTime > 100){
+  //Assume switcing within 50ms to be contact bounce
+  //(For 20 in wheel, 50ms = 71.4mph)
+  if(stateTime > 50){
     stateTime = 0;
     preState = curState;
     //Record time on falling edge
     if(!curState){
       //Print speed
       unsigned long int t = millis() - preTrig;
-      bikeSpeed = TAU*wheelRaidus/t*3600000.0/63360.0;
+      //Calculate Speed
+      bikeSpeed = TAU*wheelRaidus/t * 3600000.0/63360.0;
       Serial.print(bikeSpeed);
       Serial.print("\t");
       Serial.println(t);
