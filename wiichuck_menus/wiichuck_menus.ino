@@ -1,3 +1,11 @@
+//Demo for navigating menus with nunchuck
+//Results are printed to serial monitor
+//
+//  Stick UP - Navigate UP
+//  Stick DN - Navigate DOWN
+//         Z - Confirm
+//         C - Cancel
+
 #include <WiiChuck.h>
 #include <Wire.h>
 
@@ -14,12 +22,13 @@ void setup() {
   init_menus();
   nunchuck.begin();
   Serial.begin(115200);
-  
 }
 
 void loop() {
   calibrateDeadzone();
   nunchuck.readData();
+
+  //Send commands to navigate menus
   char stick = calcJ();
   if (stick != '0') {
     menu_nav(stick);
@@ -30,5 +39,6 @@ void loop() {
   if(buttonCclick()){
     menu_nav('C');
   }
+  
   delay(50);
 }

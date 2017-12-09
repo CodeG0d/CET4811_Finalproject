@@ -3,7 +3,6 @@
 //SDA A4
 //SCL A5
 
-
 int aX;
 int aY;
 int aZ;

@@ -84,8 +84,9 @@ void menu_nav(char command) {
 }
 
 void printMenu() {
+  //Print current menu
   Serial.print(curmenu.myname);
-  Serial.print(selection);
+  //Serial.print(selection);
   Serial.print(" > ");
   Menu submenu = curmenu.children[selection];
   Serial.println(submenu.myname);
