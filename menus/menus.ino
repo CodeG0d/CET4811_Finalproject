@@ -33,37 +33,45 @@ void loop() {
 }
 
 Menu menu_main;
-Menu menu_main_items[4];
-Menu menu_startlogging;
-Menu menu_reviewlogs;
-Menu menu_config;
-  Menu menu_controller;
-  Menu menu_tachometer;
-  Menu menu_friction;
-Menu menu_poweroff;
+Menu menu_main_items[3];
+  Menu menu_logging;
+  Menu menu_logging_items[3];
+    Menu menu_startlogging;
+    Menu menu_reviewlogs;
+    Menu menu_clearlogs;
+  Menu menu_config;
+  Menu menu_config_items[3];
+    Menu menu_controller;
+    Menu menu_tachometer;
+    Menu menu_friction;
+  Menu menu_poweroff;
 
-
-
-
-void init_menus(){
-  create_menu(menu_startlogging, "Start Logging", menu_main, 0, NULL);
-  create_menu(menu_reviewlogs, "Review Logs", menu_main, 0, NULL);
-  create_menu(menu_config, "Configuration", menu_main, 3, NULL);
-  create_menu(menu_poweroff, "Power Off", menu_main, 4, NULL);
-  menu_main_items[0] = menu_startlogging;
-  menu_main_items[1] = menu_reviewlogs;
-  menu_main_items[2] = menu_config;
-  menu_main_items[3] = menu_poweroff;
-  create_menu(menu_main, "Main Menu", menu_main, 4, menu_main_items);
-  curmenu = menu_main;
+void init_menus(){//Create all the menus
+  //Create config menu
+  menu_config_items[0] = create_menu(menu_controller, "Setup Controller", menu_config, 0, NULL);
+  menu_config_items[1] = create_menu(menu_tachometer, "Setup Tachometer", menu_config, 0, NULL);
+  menu_config_items[2] = create_menu(menu_friction, "Setup Friction", menu_config, 0, NULL);
+  //Create logging menu
+  menu_logging_items[0] = create_menu(menu_startlogging, "Start Logging", menu_main, 0, NULL);
+  menu_logging_items[1] = create_menu(menu_reviewlogs, "Review Logs", menu_main, 0, NULL);
+  menu_logging_items[2] = create_menu(menu_clearlogs, "Clear Logs", menu_main, 0, NULL);
+  //Create main menu
+  menu_main_items[0] = create_menu(menu_logging, "Logging", menu_main, 3, menu_logging_items);
+  menu_main_items[1] = create_menu(menu_config, "Configuration", menu_main, 3, menu_config_items);
+  menu_main_items[2] = create_menu(menu_poweroff, "Power Off", menu_main, 0, NULL);
+  menu_main = create_menu(menu_main, "Main Menu", menu_main, 3, menu_main_items);
+  //inital state
+  curmenu = menu_logging;
   selection = 0;
+  printMenu();
 }
 
-void create_menu(Menu &theMenu, char theName[], Menu &theParent, int theSize, Menu theChildren[]){
+Menu create_menu(Menu &theMenu, char theName[], Menu &theParent, int theSize, Menu theChildren[]){
   theMenu.myname = theName;
   theMenu.parent = &theParent;
   theMenu.len = theSize;
   theMenu.children = theChildren;
+  return(theMenu);
 }
 
 void menu_nav(){  
@@ -78,9 +86,15 @@ void menu_nav(){
   }
   if(!digitalRead(A4) && pC){
     Serial.println("C");
+    curmenu = *curmenu.parent;
+    selection = 0;
+    printMenu();
   }
   if(!digitalRead(A5) && pZ){
     Serial.println("Z");
+    curmenu = curmenu.children[selection];
+    selection = 0;
+    printMenu();
   }
 }
 
@@ -88,7 +102,7 @@ void printMenu(){
   Serial.print(curmenu.myname);
   Serial.print(selection);
   Serial.print(" > ");
-  //Menu submenu = menu_main_items.children[selection];
-  Serial.println(menu_main_items[selection].myname);
+  Menu submenu = curmenu.children[selection];
+  Serial.println(submenu.myname);
 }
 
