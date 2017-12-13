@@ -1,6 +1,3 @@
-#include <WiiChuck.h>
-#include <Wire.h>
-
 #include <Adafruit_LiquidCrystal.h>
 //Create lcd object
 //Data
@@ -8,7 +5,7 @@
 //Latch
 Adafruit_LiquidCrystal lcd(12,13,5);
 
-void setup() {
+void init_lcd() {
   Serial.begin(115200);
 
   // set up the LCD's number of rows and columns: 
@@ -18,7 +15,7 @@ void setup() {
 }
 
 
-void loop() {
+void lcd_print() {
 
   delay(50);
 

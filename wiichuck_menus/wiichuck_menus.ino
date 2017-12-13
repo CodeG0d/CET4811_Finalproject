@@ -20,6 +20,7 @@ struct Menu {
 
 void setup() {
   init_menus();
+  init_lcd();
   nunchuck.begin();
   Serial.begin(115200);
   printMenu();

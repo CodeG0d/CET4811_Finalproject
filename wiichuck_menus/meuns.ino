@@ -84,10 +84,16 @@ void menu_nav(char command) {
 
 void printMenu() {
   //Print current menu
-  Serial.print(curmenu.myname);
+  //Serial.print(curmenu.myname);
   //Serial.print(selection);
-  Serial.print(" > ");
+  //Serial.print(" > ");
+  //Menu submenu = curmenu.children[selection];
+  //Serial.println(submenu.myname);
   Menu submenu = curmenu.children[selection];
-  Serial.println(submenu.myname);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(curmenu.myname);
+  lcd.setCursor(0, 1);
+  lcd.print(submenu.myname);
 }
 
