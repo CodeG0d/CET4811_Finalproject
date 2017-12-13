@@ -1,4 +1,4 @@
-#include <WiiChuck.h>
+rm #include <WiiChuck.h>
 #include <Wire.h>
 
 #include "Adafruit_LiquidCrystal.h"
